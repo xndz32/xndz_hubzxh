@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xndz Hub - Sistema de Key</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f0f13; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .container { background-color: #1a1a24; padding: 40px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); text-align: center; width: 350px; border: 1px solid #2a2a35; }
+        h1 { color: #ff3366; font-size: 24px; margin-bottom: 10px; }
+        p { color: #aaa; font-size: 14px; margin-bottom: 25px; line-height: 1.5; }
+        .btn { display: block; width: 100%; padding: 12px; margin-bottom: 15px; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-sub { background-color: #ff0000; color: white; text-decoration: none; }
+        .btn-sub:hover { background-color: #cc0000; }
+        .btn-key { background-color: #333; color: #888; cursor: not-allowed; }
+        .btn-key.active { background-color: #ff3366; color: white; cursor: pointer; }
+        .btn-key.active:hover { background-color: #e62e5c; }
+        .key-display { display: none; margin-top: 20px; padding: 15px; background-color: #0a0a0d; border: 1px dashed #ff3366; border-radius: 6px; font-family: monospace; font-size: 18px; color: #ff3366; user-select: all; cursor: copy;}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Xndz Hub</h1>
+        <p>Complete a etapa abaixo para liberar sua Key Diária.</p>
+
+        <a href="https://youtube.com/@xndz_oficial?si=yq3NtPsCazeIKRwA" target="_blank" class="btn btn-sub" id="subBtn" onclick="startTimer()">1. Inscrever-se no Canal</a>
+        
+        <button class="btn btn-key" id="keyBtn" disabled onclick="showKey()">2. Obter Key (Aguarde...)</button>
+
+        <div class="key-display" id="keyDisplay">Gerando...</div>
+    </div>
+
+    <script>
+        let timerStarted = false;
+
+        // Fórmula secreta para gerar a Key Diária
+        function gerarKeyDiaria() {
+            const data = new Date();
+            const ano = data.getUTCFullYear();
+            const mes = data.getUTCMonth() + 1; // Meses em JS começam no 0
+            const dia = data.getUTCDate();
+            
+            // Cria um número único para o dia e aplica uma matemática simples
+            const semente = (ano * 10000) + (mes * 100) + dia;
+            const hash = (semente * 73) + 1337; // Fórmula que o script Lua também usa
+            
+            return "XNDZ-" + hash;
+        }
+
+        function startTimer() {
+            if (timerStarted) return;
+            timerStarted = true;
+            
+            const keyBtn = document.getElementById('keyBtn');
+            let timeLeft = 10; 
+
+            keyBtn.innerText = `Aguarde ${timeLeft} segundos...`;
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                keyBtn.innerText = `Aguarde ${timeLeft} segundos...`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    keyBtn.innerText = "2. Obter Key";
+                    keyBtn.classList.add('active');
+                    keyBtn.removeAttribute('disabled');
+                }
+            }, 1000);
+        }
+
+        function showKey() {
+            const keyDisplay = document.getElementById('keyDisplay');
+            keyDisplay.innerText = gerarKeyDiaria();
+            keyDisplay.style.display = 'block';
+            
+            document.getElementById('keyBtn').style.display = 'none';
+            document.getElementById('subBtn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
